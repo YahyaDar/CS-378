@@ -3,7 +3,7 @@
   
   
 
-## **CS-378 :: Systems Implementation of Frequent Itemset Mining (Spring 2026)**
+## **CS-378 :: Design and Analysis of Algorithms (Spring 2026)**
 
   
   
