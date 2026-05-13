@@ -4,8 +4,25 @@
 
 std::vector<Itemset> Apriori::GenerateCandidates(const std::vector<Itemset>& freq_itemsets) {
     std::vector<Itemset> candidates;
-    // TODO: Implement Candidate Generation (k -> k+1)
-    // Use std::vector methods and iterators to join itemsets.
+
+    if (freq_itemsets.empty()) {
+        return candidates;
+    }
+
+    int k = freq_itemsets[0].items.size();
+
+    for(size_t i = 0; i < freq_itemsets.size(); i++) {
+        for(size_t j = i + 1; j < freq_itemsets.size(); j++) {
+            // Check if the first k-1 items are the same
+            if(std::equal(freq_itemsets[i].items.begin(), freq_itemsets[i].items.end() - 1, freq_itemsets[j].items.begin())) {
+                Itemset candidate = freq_itemsets[i];
+                candidate.items.push_back(freq_itemsets[j].items.back()); // Add the last item of the second itemset
+                candidate.support_count = 0;
+                candidates.push_back(candidate);
+            }
+        }
+    }
+
     return candidates;
 }
 
