@@ -28,8 +28,34 @@ std::vector<Itemset> Apriori::GenerateCandidates(const std::vector<Itemset>& fre
 
 std::vector<Itemset> Apriori::Prune(const std::vector<Itemset>& candidates, const std::vector<Itemset>& freq_itemsets) {
     std::vector<Itemset> pruned_candidates;
-    // TODO: Implement anti-monotonicity pruning.
-    // std::binary_search is highly recommended here if freq_itemsets are sorted.
+
+    if (candidates.empty()) {
+        return pruned_candidates;
+    }
+
+    auto LambdaCompare = [](const Itemset& a, const Itemset& b) {
+        return a.items < b.items;
+    };
+
+    for(size_t i = 0; i < candidates.size(); ++i) {
+        bool is_valid = true;
+        for(size_t j = 0; j < candidates[i].items.size(); ++j) {
+            Itemset subset;
+            for(size_t k = 0; k < candidates[i].items.size(); ++k) {
+                if(k != j) {
+                    subset.items.push_back(candidates[i].items[k]);
+                }
+            }
+            if (std::binary_search(freq_itemsets.begin(), freq_itemsets.end(), subset, LambdaCompare) == false) {
+                    is_valid = false;
+                    break;
+                }
+
+        }
+        if(is_valid) {
+            pruned_candidates.push_back(candidates[i]);
+        }
+    }
     return pruned_candidates;
 }
 
