@@ -60,8 +60,13 @@ std::vector<Itemset> Apriori::Prune(const std::vector<Itemset>& candidates, cons
 }
 
 void Apriori::CalculateSupport(const TransactionDB& db, std::vector<Itemset>& candidates) {
-    // TODO: Implement Support Counting (The I/O Bottleneck)
-    // Iterate over transactions and candidates. Consider std::includes.
+    for (size_t i = 0; i < db.transactions.size(); ++i) {
+        for (size_t j = 0; j < candidates.size(); ++j) {
+            if (std::includes(db.transactions[i].begin(), db.transactions[i].end(), candidates[j].items.begin(), candidates[j].items.end())) {
+                candidates[j].support_count++;
+            }
+        }
+    }
 }
 
 std::vector<Itemset> Apriori::Mine(const TransactionDB& db, float min_sup) {
